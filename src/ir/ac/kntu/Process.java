@@ -13,11 +13,13 @@ public class Process implements Runnable{
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         coreNeeds = CN;
+        state = "waiting";
     }
 
     @Override
     public void run() {
-
+        state = "ready";
+        Scheduler.getInstance().enterReadyQ(this);
     }
 
     public void setState(String state) {

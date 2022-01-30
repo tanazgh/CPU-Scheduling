@@ -1,17 +1,18 @@
 package ir.ac.kntu;
 
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Scheduler {
-    private Scheduler instance = new Scheduler();
-
-    public Scheduler getInstance() {
-        return instance;
-    }
+    private static Scheduler instance = new Scheduler();
 
     private Scheduler() {
+        readyQ = new PriorityQueue<>();
+    }
 
+    public static Scheduler getInstance() {
+        return instance;
     }
 
     private Queue<Process> readyQ;
@@ -30,10 +31,18 @@ public class Scheduler {
     }
 
     public boolean exitReadyQ(Process p) {
-        if (p.equals(readyQ.poll())) {
+        if (p.equals(readyQ.peek())) {
             return true;
         }
-        readyQ.add(p);
         return false;
+    }
+
+    public void schedule() {
+        while (true) {
+            if (cpu.lock(readyQ.peek())) {
+                Process p = readyQ.poll();
+
+            }
+        }
     }
 }

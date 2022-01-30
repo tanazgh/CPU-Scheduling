@@ -11,17 +11,21 @@ public class CPU {
         cores = c;
     }
 
-    public void lock(Process p) {
+    public boolean lock(Process p) {
         if (lock == 0) {
             CS = p;
             lock = 1;
+            return true;
         }
+        return false;
     }
 
-    public void release(Process p) {
+    public boolean release(Process p) {
         if (p.equals(CS)) {
             lock = 0;
+            return true;
         }
+        return false;
     }
 
 }
