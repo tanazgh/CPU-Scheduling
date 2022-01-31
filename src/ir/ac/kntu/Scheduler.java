@@ -1,28 +1,22 @@
 package ir.ac.kntu;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Scheduler {
-    private static Scheduler instance = new Scheduler();
+    private static final Scheduler instance = new Scheduler();
+
+    private PriorityQueueWrapper readyQ;
+    private CPU cpu;
 
     private Scheduler() {
-        readyQ = new PriorityQueue<>(new Comparator<Process>() {
-            @Override
-            public int compare(Process o1, Process o2) {
-                return o1.getPriority()-o2.getPriority();
-            }
-        });
+        readyQ = new PriorityQueueWrapper();
     }
 
     public static Scheduler getInstance() {
         return instance;
     }
-
-    private Queue<Process> readyQ;
-    private CPU cpu;
 
     public void setCpu(CPU cpu) {
         this.cpu = cpu;
@@ -44,12 +38,17 @@ public class Scheduler {
         return false;
     }
 
-    public void schedule() {
-        while (true) {
-            if (cpu.acquire(readyQ.peek())) {
+    public void schedule(Process process) {
+        State s = process.getState();
+        if(s == State.READY) {
+            readyQ.add(process);
+            while (cpu.acquire(readyQ.peek())) {
                 Process p = readyQ.poll();
-
+                p.setState(State.RUNNING);
             }
+        }
+        if (s == State.TERMINATED){
+            cpu.release(process);
         }
     }
 }
