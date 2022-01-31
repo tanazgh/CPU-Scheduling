@@ -78,4 +78,15 @@ public class Process implements Runnable{
     public int hashCode() {
         return Objects.hash(arrivalTime, burstTime, coreNeeds, state);
     }
+
+    @Override
+    public String toString() {
+        return "Process{" +
+                "arrivalTime=" + arrivalTime +
+                ", burstTime=" + burstTime +
+                ", coreNeeds=" + coreNeeds +
+                ", state=" + state +
+                ", priority=" + priority +
+                '}';
+    }
 }

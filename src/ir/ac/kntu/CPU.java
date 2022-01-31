@@ -15,10 +15,12 @@ public class CPU {
     }
 
     public boolean acquire(Process p) {
-        CS.add(p);
         synchronized (availableCores) {
             if (availableCores > 0 && availableCores - p.getCoreNeeds()>0) {
                 availableCores = availableCores - p.getCoreNeeds();
+                synchronized (CS) {
+                    CS.add(p);
+                }
                 return true;
             }
             return false;
@@ -29,7 +31,9 @@ public class CPU {
         synchronized (availableCores) {
             if (CS.contains(p)) {
                 availableCores = availableCores + p.getCoreNeeds();
-                CS.remove(p);
+                synchronized (CS) {
+                    CS.remove(p);
+                }
                 return true;
             }
             return false;
@@ -45,7 +49,9 @@ public class CPU {
     }
 
     public Integer getAvailableCores() {
-        return availableCores;
+        synchronized (availableCores) {
+            return availableCores;
+        }
     }
 
     public void setAvailableCores(Integer availableCores) {
@@ -53,10 +59,28 @@ public class CPU {
     }
 
     public List<Process> getCS() {
-        return CS;
+        synchronized (CS) {
+            return CS;
+        }
     }
 
     public void setCS(List<Process> CS) {
         this.CS = CS;
+    }
+
+    @Override
+    public String toString() {
+        return "CPU{" +
+                "\ncores=" + cores +
+                "\navailableCores=" + getAvailableCores() +
+                "\nbusyCores=" + (cores-getAvailableCores()) +
+                "\nCS=" + printCS() +
+                '}';
+    }
+
+    private synchronized String printCS() {
+        synchronized (CS) {
+            return getCS().toString();
+        }
     }
 }

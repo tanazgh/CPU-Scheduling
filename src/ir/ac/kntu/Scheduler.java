@@ -41,8 +41,9 @@ public class Scheduler {
         if (s == State.TERMINATED){
             cpu.release(process);
         }
-        while (cpu.acquire(readyQ.peek())) {
+        while (readyQ.size()!= 0 && cpu.acquire(readyQ.peek())) {
             Process p = readyQ.poll();
+            System.out.println(p.toString());
             p.setState(State.RUNNING);
             threadPoolExecutor.execute(p);
         }
