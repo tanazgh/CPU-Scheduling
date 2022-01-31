@@ -1,6 +1,5 @@
 package ir.ac.kntu;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Process implements Runnable{
