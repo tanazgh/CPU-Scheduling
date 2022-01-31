@@ -33,6 +33,10 @@ public class Scheduler {
         return cpu;
     }
 
+    public void shutdown(){
+        threadPoolExecutor.shutdown();
+    }
+
     public void schedule(Process process) {
         State s = process.getState();
         if(s == State.READY) {

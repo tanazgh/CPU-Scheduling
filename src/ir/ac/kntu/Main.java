@@ -19,6 +19,12 @@ public class Main {
                 System.out.println(Scheduler.getInstance().getReadyQ().toString());
             }
         }, 0, 3000);
-
+        try {
+            Thread.sleep(3000*10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timer.cancel();
+        Scheduler.getInstance().shutdown();
     }
 }

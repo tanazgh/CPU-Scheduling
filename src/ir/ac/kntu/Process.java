@@ -15,6 +15,10 @@ public class Process implements Runnable{
         coreNeeds = CN;
         state = State.READY;
         this.priority = priority;
+        start();
+    }
+
+    public void start(){
         Scheduler.getInstance().schedule(this);
     }
 
