@@ -6,23 +6,23 @@ import java.util.Objects;
 public class Process implements Runnable{
     private int arrivalTime;
     private int burstTime;
-    private List<Core> coreNeeds;
-    private String state;
+    private int coreNeeds;
+    private State state;
 
-    public Process(int arrivalTime, int burstTime, List<Core> CN) {
+    public Process(int arrivalTime, int burstTime, int CN) {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         coreNeeds = CN;
-        state = "waiting";
+        state = State.READY;
     }
 
     @Override
     public void run() {
-        state = "ready";
-        Scheduler.getInstance().enterReadyQ(this);
+        state = State.RUNNING;
+        //Scheduler.getInstance().enterReadyQ(this);
     }
 
-    public void setState(String state) {
+    public void setState(State state) {
         this.state = state;
     }
 
@@ -42,15 +42,15 @@ public class Process implements Runnable{
         this.burstTime = burstTime;
     }
 
-    public List<Core> getCoreNeeds() {
+    public int getCoreNeeds() {
         return coreNeeds;
     }
 
-    public void setCoreNeeds(List<Core> coreNeeds) {
+    public void setCoreNeeds(int coreNeeds) {
         this.coreNeeds = coreNeeds;
     }
 
-    public String getState() {
+    public State getState() {
         return state;
     }
 
@@ -59,7 +59,8 @@ public class Process implements Runnable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Process process = (Process) o;
-        return arrivalTime == process.arrivalTime && burstTime == process.burstTime && coreNeeds.equals(process.coreNeeds) && state.equals(process.state);
+        return arrivalTime == process.arrivalTime && burstTime == process.burstTime &&
+                coreNeeds == process.coreNeeds && state.equals(process.state);
     }
 
     @Override
