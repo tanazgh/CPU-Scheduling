@@ -1,31 +1,39 @@
 package ir.ac.kntu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CPU {
-    private List<Core> cores;
-    private int lock;
-    private Process CS;
+    private int cores;
+    private Integer availableCores;
+    private List<Process> CS;
 
-    public CPU(List<Core> c) {
-        cores = c;
+    public CPU(int cores) {
+        this.cores = cores;
+        availableCores = cores;
+        CS = new ArrayList<>();
     }
 
-    public boolean lock(Process p) {
-        if (lock == 0) {
-            CS = p;
-            lock = 1;
-            return true;
+    public boolean acquire(Process p) {
+        CS.add(p);
+        synchronized (availableCores) {
+            if (availableCores > 0 && availableCores - p.getCoreNeeds()>0) {
+                availableCores = availableCores - p.getCoreNeeds();
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     public boolean release(Process p) {
-        if (p.equals(CS)) {
-            lock = 0;
-            return true;
+        synchronized (availableCores) {
+            if (CS.contains(p)) {
+                availableCores = availableCores + p.getCoreNeeds();
+                CS.remove(p);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
 }

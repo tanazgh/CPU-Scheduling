@@ -8,12 +8,14 @@ public class Process implements Runnable{
     private int burstTime;
     private int coreNeeds;
     private State state;
+    private int priority;
 
-    public Process(int arrivalTime, int burstTime, int CN) {
+    public Process(int arrivalTime, int burstTime, int CN, int priority) {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         coreNeeds = CN;
         state = State.READY;
+        this.priority = priority;
     }
 
     @Override
@@ -52,6 +54,10 @@ public class Process implements Runnable{
 
     public State getState() {
         return state;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     @Override
