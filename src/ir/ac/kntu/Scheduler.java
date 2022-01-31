@@ -1,17 +1,24 @@
 package ir.ac.kntu;
 
+import com.sun.source.tree.CaseTree;
+
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Scheduler {
     private static final Scheduler instance = new Scheduler();
+    private ThreadPoolExecutor threadPoolExecutor;
 
     private PriorityQueueWrapper readyQ;
     private CPU cpu;
 
     private Scheduler() {
         readyQ = new PriorityQueueWrapper();
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
     }
 
     public static Scheduler getInstance() {
@@ -26,29 +33,18 @@ public class Scheduler {
         return cpu;
     }
 
-    public boolean enterReadyQ(Process p) {
-        return readyQ.add(p);
-    }
-
-    public boolean exitReadyQ(Process p) {
-        if (p.equals(readyQ.peek())) {
-            readyQ.poll();
-            return true;
-        }
-        return false;
-    }
-
     public void schedule(Process process) {
         State s = process.getState();
         if(s == State.READY) {
             readyQ.add(process);
-            while (cpu.acquire(readyQ.peek())) {
-                Process p = readyQ.poll();
-                p.setState(State.RUNNING);
-            }
         }
         if (s == State.TERMINATED){
             cpu.release(process);
+        }
+        while (cpu.acquire(readyQ.peek())) {
+            Process p = readyQ.poll();
+            p.setState(State.RUNNING);
+            threadPoolExecutor.execute(p);
         }
     }
 }

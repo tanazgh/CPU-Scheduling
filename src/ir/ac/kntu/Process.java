@@ -3,31 +3,37 @@ package ir.ac.kntu;
 import java.util.Objects;
 
 public class Process implements Runnable{
-    private int arrivalTime;
+    private long arrivalTime;
     private int burstTime;
     private int coreNeeds;
     private State state;
     private int priority;
 
-    public Process(int arrivalTime, int burstTime, int CN, int priority) {
+    public Process(long arrivalTime, int burstTime, int CN, int priority) {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         coreNeeds = CN;
         state = State.READY;
         this.priority = priority;
+        Scheduler.getInstance().schedule(this);
     }
 
     @Override
     public void run() {
-        state = State.RUNNING;
-        //Scheduler.getInstance().enterReadyQ(this);
+        try {
+            Thread.sleep(burstTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        state = State.TERMINATED;
+        Scheduler.getInstance().schedule(this);
     }
 
     public void setState(State state) {
         this.state = state;
     }
 
-    public int getArrivalTime() {
+    public long getArrivalTime() {
         return arrivalTime;
     }
 
