@@ -43,9 +43,14 @@ public class Scheduler {
         }
         while (readyQ.size()!= 0 && cpu.acquire(readyQ.peek())) {
             Process p = readyQ.poll();
-            System.out.println(p.toString());
             p.setState(State.RUNNING);
             threadPoolExecutor.execute(p);
+        }
+    }
+
+    public PriorityQueueWrapper getReadyQ() {
+        synchronized (readyQ) {
+            return readyQ;
         }
     }
 }

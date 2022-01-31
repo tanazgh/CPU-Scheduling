@@ -16,7 +16,7 @@ public class CPU {
 
     public boolean acquire(Process p) {
         synchronized (availableCores) {
-            if (availableCores > 0 && availableCores - p.getCoreNeeds()>0) {
+            if (availableCores > 0 && availableCores - p.getCoreNeeds()>=0) {
                 availableCores = availableCores - p.getCoreNeeds();
                 synchronized (CS) {
                     CS.add(p);

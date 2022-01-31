@@ -45,4 +45,13 @@ public class PriorityQueueWrapper {
             return processes.size();
         }
     }
+
+    @Override
+    public String toString() {
+        synchronized (processes) {
+            return "ReadyQueue{" +
+                    "processes=" + processes +
+                    '}';
+        }
+    }
 }
