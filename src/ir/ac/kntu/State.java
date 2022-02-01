@@ -1,5 +1,5 @@
 package ir.ac.kntu;
 
 public enum State {
-    RUNNING, WAITING, READY, TERMINATED, NEW
+    RUNNING, WAITING, READY, TERMINATED
 }

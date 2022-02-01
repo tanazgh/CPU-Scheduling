@@ -29,10 +29,6 @@ public class Scheduler {
         this.cpu = cpu;
     }
 
-    public CPU getCpu() {
-        return cpu;
-    }
-
     public void shutdown(){
         threadPoolExecutor.shutdown();
     }

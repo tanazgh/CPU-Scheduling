@@ -37,28 +37,8 @@ public class Process implements Runnable{
         this.state = state;
     }
 
-    public long getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(int arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public int getBurstTime() {
-        return burstTime;
-    }
-
-    public void setBurstTime(int burstTime) {
-        this.burstTime = burstTime;
-    }
-
     public int getCoreNeeds() {
         return coreNeeds;
-    }
-
-    public void setCoreNeeds(int coreNeeds) {
-        this.coreNeeds = coreNeeds;
     }
 
     public State getState() {

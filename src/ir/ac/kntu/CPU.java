@@ -40,32 +40,16 @@ public class CPU {
         }
     }
 
-    public int getCores() {
-        return cores;
-    }
-
-    public void setCores(int cores) {
-        this.cores = cores;
-    }
-
     public Integer getAvailableCores() {
         synchronized (availableCores) {
             return availableCores;
         }
     }
 
-    public void setAvailableCores(Integer availableCores) {
-        this.availableCores = availableCores;
-    }
-
     public List<Process> getCS() {
         synchronized (CS) {
             return CS;
         }
-    }
-
-    public void setCS(List<Process> CS) {
-        this.CS = CS;
     }
 
     @Override
