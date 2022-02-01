@@ -14,31 +14,34 @@ public class Process implements Runnable{
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         coreNeeds = CN;
-        state = State.READY;
         this.priority = priority;
-        Scheduler.getInstance().schedule(this);
+        randomRequest();
     }
 
     @Override
     public void run() {
+        try {
+            Thread.sleep(burstTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        state = State.TERMINATED;
+        Scheduler.getInstance().schedule(this);
+    }
+
+    public void randomRequest(){
         Random random = new Random();
         int n = random.nextInt(3)+1;
         for (int i = 0; i < n; i++) {
+            setState(State.READY);
+            Scheduler.getInstance().schedule(this);
+            while (state == State.RUNNING);
+            int delay = random.nextInt(1000)+1000;
             try {
-                Thread.sleep(burstTime);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            state = State.TERMINATED;
-            Scheduler.getInstance().schedule(this);
-            int d = random.nextInt(1000)+2000;
-            try {
-                Thread.sleep(burstTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            state = State.READY;
-            Scheduler.getInstance().schedule(this);
         }
     }
 
