@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Process implements Runnable{
     private long arrivalTime;
@@ -15,22 +16,30 @@ public class Process implements Runnable{
         coreNeeds = CN;
         state = State.READY;
         this.priority = priority;
-        start();
-    }
-
-    public void start(){
         Scheduler.getInstance().schedule(this);
     }
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(burstTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        Random random = new Random();
+        int n = random.nextInt(3)+1;
+        for (int i = 0; i < n; i++) {
+            try {
+                Thread.sleep(burstTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            state = State.TERMINATED;
+            Scheduler.getInstance().schedule(this);
+            int d = random.nextInt(1000)+2000;
+            try {
+                Thread.sleep(burstTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            state = State.READY;
+            Scheduler.getInstance().schedule(this);
         }
-        state = State.TERMINATED;
-        Scheduler.getInstance().schedule(this);
     }
 
     public void setState(State state) {
