@@ -38,14 +38,17 @@ public class Scheduler {
         if(s == State.READY) {
             readyQ.add(process);
         }
-        if (s == State.TERMINATED){
+        if (s == State.TERMINATED || s == State.WAITING){
             cpu.release(process);
         }
         while (readyQ.size()!= 0 && cpu.acquire(readyQ.peek())) {
             Process p = readyQ.poll();
             p.setState(State.RUNNING);
-            threadPoolExecutor.execute(p);
         }
+    }
+
+    public void executeProcess(Process p){
+        threadPoolExecutor.execute(p);
     }
 
     public PriorityQueueWrapper getReadyQ() {
