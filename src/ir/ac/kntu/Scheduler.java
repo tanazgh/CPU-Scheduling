@@ -41,12 +41,17 @@ public class Scheduler {
         if (s == State.TERMINATED || s == State.WAITING){
             cpu.release(process);
         }
-        boolean flag = false;
+        Boolean flag = false;
+        synchronized (flag) {
+            flag = false;
+        }
         while (readyQ.size()!= 0 && cpu.acquire(readyQ.peek())) {
             Process p = readyQ.poll();
             p.setState(State.RUNNING);
             if (process == p){
-                flag = true;
+                synchronized (flag) {
+                    flag = true;
+                }
             }
         }
         if(!flag && s == State.READY){

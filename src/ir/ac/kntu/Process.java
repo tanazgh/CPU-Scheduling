@@ -1,5 +1,6 @@
 package ir.ac.kntu;
 
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Random;
 
@@ -29,9 +30,10 @@ public class Process implements Runnable{
         int n = rand.nextInt(3) + 1;
         System.out.println("process" + id + " : " + n + " requests");
         for (int i = 0; i < n; i++) {
-            System.out.println("process" + id + " : " + "request" + i);
             incRequest();
             int delay = rand.nextInt(1000) + 1000;
+            arrivalTime = LocalTime.now().getNano();
+            System.out.println("process" + id + " : " + "request" + i);
             setState(State.READY);
             Scheduler.getInstance().schedule(this);
             while (getState() != State.RUNNING);
